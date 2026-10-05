@@ -88,8 +88,12 @@ DJANGO_APPS = [
     "django.forms",
 ]
 THIRD_PARTY_APPS = [
+{%- if cookiecutter.theme == 'Bootstrap 5' %}
     "crispy_forms",
     "crispy_bootstrap5",
+{%- else %}
+    "django_tailwind_cli",
+{%- endif %}
     "allauth",
     "allauth.account",
     "allauth.mfa",
@@ -229,9 +233,16 @@ TEMPLATES = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#form-renderer
 FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
+{%- if cookiecutter.theme == 'Bootstrap 5' %}
 # http://django-crispy-forms.readthedocs.io/en/latest/install.html#template-packs
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+{%- else %}
+# Tailwind source lives outside static files so collectstatic never processes its imports.
+TAILWIND_CLI_VERSION = "4.3.3"
+TAILWIND_CLI_SRC_CSS = "frontend/tailwind.css"
+TAILWIND_CLI_DIST_CSS = "css/tailwind.css"
+{%- endif %}
 
 # FIXTURES
 # ------------------------------------------------------------------------------

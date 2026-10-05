@@ -1,0 +1,32 @@
+{% raw %}{% if form.non_field_errors %}<div role="alert"
+     class="mb-4 rounded-lg bg-red-50 p-3 text-sm text-red-700">{{ form.non_field_errors }}</div>{% endif %}
+{% for hidden in form.hidden_fields %}
+  {{ hidden }}
+  {% if hidden.errors %}<div role="alert" class="mb-2 text-sm text-red-700">{{ hidden.errors }}</div>{% endif %}
+{% endfor %}
+<div class="mb-6 space-y-5">
+  {% for field in form.visible_fields %}
+    <div class="form-field">
+      {% if field.widget_type == "checkbox" %}
+        <label for="{{ field.id_for_label }}"
+               class="flex items-center text-sm font-medium text-slate-900">
+          {{ field }}
+          {{ field.label }}
+        </label>
+      {% else %}
+        <label for="{{ field.id_for_label }}"
+               class="mb-1 block text-sm font-medium text-slate-900">
+          {{ field.label }}
+          {% if field.field.required %}<span aria-hidden="true" class="ml-1 text-red-600">*</span>{% endif %}
+        </label>
+        {{ field }}
+      {% endif %}
+      {% if field.help_text %}<div id="{{ field.auto_id }}_helptext"
+     class="mt-2 text-sm text-slate-500">{{ field.help_text|safe }}</div>{% endif %}
+      {% if field.errors %}<div id="{{ field.auto_id }}_error"
+     role="alert"
+     class="mt-2 text-sm text-red-700">{{ field.errors }}</div>{% endif %}
+    </div>
+  {% endfor %}
+</div>
+{% endraw %}

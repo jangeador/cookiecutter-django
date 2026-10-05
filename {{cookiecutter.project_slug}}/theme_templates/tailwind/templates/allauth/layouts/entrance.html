@@ -1,0 +1,19 @@
+{% raw %}{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+  {% block head_title %}
+    {% translate "Sign In" %}
+  {% endblock head_title %}
+{% endblock title %}
+{% block body %}
+  <main class="mx-auto flex min-h-screen max-w-lg flex-col justify-center px-4 py-12 sm:px-6">
+    {% include "partials/messages.html" %}
+    <div class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
+      {% block content %}
+      {% endblock content %}
+    </div>
+    {% block extra_body %}
+    {% endblock extra_body %}
+  </main>
+{% endblock body %}
+{% endraw %}

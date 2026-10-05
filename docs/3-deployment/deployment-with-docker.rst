@@ -4,6 +4,29 @@ Deployment with Docker
 .. index:: deployment, docker, docker compose, compose
 
 
+Cloudflare DNS-01 certificates
+-----------------------------
+
+The default ``traefik_acme_challenge=Cloudflare`` uses DNS-01 for Let's Encrypt
+certificates. Your domain's authoritative DNS must be managed by Cloudflare.
+Create an API token scoped to the domain's zone with ``Zone:Read`` and
+``DNS:Edit`` permissions, then set ``CF_DNS_API_TOKEN`` in
+``.envs/.production/.traefik``. Traefik loads this file directly; the token is
+not passed to Django or Celery. Keep it out of version control.
+
+Configure DNS records for the generated hostnames (the domain and ``www`` for
+apex domains). DNS-01 does not require an inbound port 80 challenge, although
+port 80 remains available for HTTP-to-HTTPS redirects. Port 443 must still reach
+Traefik to serve your app. If using Cloudflare's proxy, use Full (strict) SSL/TLS.
+
+Traefik stores and renews certificates in the ``production_traefik`` volume.
+Preserve that volume across deployments. AWS storage and Cloudflare DNS are
+independent; AWS does not create or configure your Cloudflare zone.
+
+Select ``traefik_acme_challenge=HTTP`` to use the original HTTP-01 behavior.
+That option does not generate a Cloudflare environment file and requires the
+challenge to reach Traefik on port 80. The choice is ignored without Docker.
+
 Prerequisites
 -------------
 

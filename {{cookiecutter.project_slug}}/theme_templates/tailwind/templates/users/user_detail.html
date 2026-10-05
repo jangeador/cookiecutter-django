@@ -1,0 +1,21 @@
+{% raw %}{% extends "base.html" %}
+{% load i18n %}
+{% block title %}
+  {% translate "Profile" %}
+{% endblock title %}
+{% block content %}
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h1>{{ object.name|default:object }}</h1>
+    {% if object == request.user %}
+      <div class="mt-6 flex flex-wrap gap-3">
+        <a class="rounded-lg bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-700"
+           href="{% url 'users:update' %}">{% translate "My Info" %}</a>
+        <a class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-100"
+           href="{% url 'account_email' %}">{% translate "E-Mail" %}</a>
+        <a class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-100"
+           href="{% url 'mfa_index' %}">{% translate "MFA" %}</a>
+      </div>
+    {% endif %}
+  </section>
+{% endblock content %}
+{% endraw %}

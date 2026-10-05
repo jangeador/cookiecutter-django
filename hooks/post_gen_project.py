@@ -424,6 +424,20 @@ def remove_rest_api_files():
     shutil.rmtree(Path("{{cookiecutter.project_slug}}", "users", "tests", "api"))
 
 
+def apply_theme():
+    theme_path = Path("theme_templates")
+    if "{{ cookiecutter.theme }}" == "Tailwind":
+        shutil.copytree(
+            theme_path / "tailwind" / "templates",
+            Path("{{cookiecutter.project_slug}}", "templates"),
+            dirs_exist_ok=True,
+        )
+        Path("{{cookiecutter.project_slug}}", "static", "css", "project.css").unlink()
+    else:
+        shutil.rmtree("frontend")
+    shutil.rmtree(theme_path)
+
+
 def main():  # noqa: C901, PLR0912, PLR0915
     debug = "{{ cookiecutter.debug }}".lower() == "y"
 
@@ -444,6 +458,9 @@ def main():  # noqa: C901, PLR0912, PLR0915
 
     if "{{ cookiecutter.editor }}" != "PyCharm":
         remove_pycharm_files()
+
+    if "{{ cookiecutter.use_docker }}".lower() != "y" or "{{ cookiecutter.traefik_acme_challenge }}" != "Cloudflare":
+        Path(".envs", ".production", ".traefik").unlink(missing_ok=True)
 
     if "{{ cookiecutter.use_docker }}".lower() == "y":
         remove_utility_files()
@@ -522,6 +539,7 @@ def main():  # noqa: C901, PLR0912, PLR0915
     if "{{ cookiecutter.use_async }}".lower() == "n":
         remove_async_files()
 
+    apply_theme()
     setup_dependencies()
 
     print(SUCCESS + "Project initialized, keep up the good work!" + TERMINATOR)

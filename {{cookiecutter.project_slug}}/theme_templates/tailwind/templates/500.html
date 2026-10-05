@@ -1,0 +1,11 @@
+{% raw %}{% extends "base.html" %}
+{% block title %}Server error{% endblock title %}
+{% block content %}
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h1>Server error</h1>
+    <p>{% if exception %}{{ exception }}{% else %}Something went wrong. Please try again shortly.{% endif %}</p>
+    <a href="{% url 'home' %}"
+       class="font-semibold text-indigo-600 hover:text-indigo-800">Return home</a>
+  </section>
+{% endblock content %}
+{% endraw %}

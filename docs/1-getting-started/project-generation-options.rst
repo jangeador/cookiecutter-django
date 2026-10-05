@@ -61,7 +61,16 @@ editor:
     3. `VS Code`_
 
 use_docker:
-    Indicates whether the project should be configured to use Docker_, `Docker Compose`_ and `devcontainer`_.
+    Indicates whether the project should be configured to use Docker_, `Docker Compose`_ and `devcontainer`_ (default: ``y``).
+
+traefik_acme_challenge:
+    Select the ACME challenge for production Traefik when ``use_docker=y``:
+
+    1. Cloudflare (default): DNS-01 using a scoped Cloudflare API token.
+    2. HTTP: HTTP-01 using port 80, preserving the original setup.
+
+    This option is ignored when Docker is disabled. For Cloudflare, populate
+    ``.envs/.production/.traefik`` before deployment. See :doc:`../3-deployment/deployment-with-docker`.
 
 postgresql_version:
     Select a PostgreSQL_ version to use. The choices are:
@@ -98,12 +107,24 @@ mail_service:
 rest_api:
     Select a REST API framework to use. The choices are:
 
-    1. None
-    2. `Django Rest Framework`_
+    1. `Django Rest Framework`_ (default)
+    2. None
     3. `Django Ninja`_
 
 use_async:
     Indicates whether the project should use web sockets with Uvicorn + Gunicorn.
+
+theme:
+    Select a UI theme:
+
+    1. Bootstrap 5 (default): the existing Bootstrap templates and crispy forms.
+    2. Tailwind: layouts, navigation, messages, authentication, profiles and error
+       pages styled with Tailwind CSS, built through ``django-tailwind-cli``.
+
+    Tailwind requires ``frontend_pipeline=None``. It downloads the standalone
+    Tailwind binary and does not need Node.js. Docker development includes a
+    ``tailwind`` watcher service and production images build CSS automatically.
+    See :doc:`../2-local-development/developing-locally` for commands.
 
 frontend_pipeline:
     Select a pipeline to compile and optimise frontend assets (JS, CSS, ...):
@@ -116,7 +137,7 @@ frontend_pipeline:
 Both Gulp and Webpack support Bootstrap recompilation with real-time variables alteration.
 
 use_celery:
-    Indicates whether the project should be configured to use Celery_.
+    Indicates whether the project should be configured to use Celery_ (default: ``y``).
 
 mail_catcher:
     Select a local email catcher to receive emails during development. The choices are:
@@ -126,7 +147,7 @@ mail_catcher:
     3. `Mailtrap Local`_
 
 use_sentry:
-    Indicates whether the project should be configured to use Sentry_.
+    Indicates whether the project should be configured to use Sentry_ (default: ``y``).
 
 use_whitenoise:
     Indicates whether the project should be configured to use WhiteNoise_.

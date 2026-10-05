@@ -272,3 +272,41 @@ Summary
 -------
 
 Congratulations, you have made it! Keep on reading to unleash full potential of Cookiecutter Django.
+
+
+Tailwind theme
+--------------
+
+Generate with ``theme=Tailwind frontend_pipeline=None`` to use
+``django-tailwind-cli``. Bootstrap 5 remains the default. Tailwind cannot be
+combined with Gulp, Webpack or Django Compressor; generation rejects those
+combinations rather than mixing asset pipelines.
+
+Without Docker, run the development server and Tailwind watcher together::
+
+    uv run python manage.py tailwind runserver
+
+For Uvicorn or a separately managed server, run this in another terminal::
+
+    uv run python manage.py tailwind watch
+
+With Docker, ``docker compose -f docker-compose.local.yml up`` starts the
+``tailwind`` service alongside Django. Saving templates or
+``frontend/tailwind.css`` rebuilds the output in the app's static directory.
+The first build downloads the platform-specific CLI binary, so internet access
+is needed initially. No Node.js or npm install is needed.
+
+Edit ``frontend/tailwind.css`` to customize the theme. This source file stays
+outside static files to avoid manifest-storage processing of Tailwind imports.
+``TAILWIND_CLI_VERSION`` pins the binary version; update it deliberately when
+upgrading Tailwind. The binary cache and generated CSS are ignored by Git.
+
+For a production deployment without Docker, build before collecting static files::
+
+    uv run python manage.py tailwind build
+    uv run python manage.py collectstatic --noinput
+
+Production Docker images run the CSS build automatically with test settings,
+without needing production credentials or a database connection. The normal
+startup command then collects the compiled CSS using the selected production
+storage backend (including AWS or WhiteNoise).
