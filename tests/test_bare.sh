@@ -20,6 +20,11 @@ sudo utility/install_os_dependencies.sh install
 # Install Python deps
 uv sync
 
+# Tailwind's standalone CSS build must finish before static collection or rendering.
+if [ -f "frontend/tailwind.css" ]; then
+    uv run python manage.py tailwind build
+fi
+
 # run the project's tests
 uv run pytest
 

@@ -37,6 +37,8 @@ jobs:
         script:
           - name: Basic
             args: "ci_tool=Gitlab"
+          - name: Tailwind CLI
+            args: "theme=Tailwind"
           - name: Celery & DRF
             args: "use_celery=y rest_api=DRF"
           - name: Gulp
@@ -64,6 +66,8 @@ jobs:
       fail-fast: false
       matrix:
         script:
+          - name: Tailwind CLI
+            args: "theme=Tailwind"
           - name: Celery
             args: "use_celery=y frontend_pipeline='Django Compressor'"
           - name: Gulp

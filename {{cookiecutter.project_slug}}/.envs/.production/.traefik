@@ -1,0 +1,3 @@
+# Cloudflare token scoped to your domain's zone, with Zone:Read and DNS:Edit.
+# Set this before starting the production Traefik service. Never commit this file.
+CF_DNS_API_TOKEN=

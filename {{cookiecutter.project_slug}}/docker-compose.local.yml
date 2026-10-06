@@ -4,7 +4,7 @@ volumes:
   {% if cookiecutter.use_celery == 'y' %}{{ cookiecutter.project_slug }}_local_redis_data: {}{% endif %}
 
 services:
-  django:{% if cookiecutter.use_celery == 'y' %} &django{% endif %}
+  django:{% if cookiecutter.use_celery == 'y' or cookiecutter.theme == 'Tailwind' %} &django{% endif %}
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
@@ -118,6 +118,14 @@ services:
       - '5555:5555'
     command: /start-flower
 
+  {%- endif %}
+  {%- if cookiecutter.theme == 'Tailwind' %}
+
+  tailwind:
+    <<: *django
+    container_name: {{ cookiecutter.project_slug }}_local_tailwind
+    ports: []
+    command: python manage.py tailwind watch
   {%- endif %}
   {%- if cookiecutter.frontend_pipeline in ['Gulp', 'Webpack'] %}
 

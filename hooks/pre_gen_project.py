@@ -15,6 +15,10 @@ SUCCESS = "\x1b[1;32m [SUCCESS]: "
 {{ cookiecutter.update({ "email": cookiecutter.email | trim }) }}
 """
 
+if "{{ cookiecutter.theme }}" == "Tailwind" and "{{ cookiecutter.frontend_pipeline }}" != "None":
+    print("Tailwind uses django-tailwind-cli. Select frontend_pipeline=None instead of Gulp, Webpack or Compressor.")
+    sys.exit(1)
+
 project_slug = "{{ cookiecutter.project_slug }}"
 if hasattr(project_slug, "isidentifier"):
     assert project_slug.isidentifier(), f"'{project_slug}' project slug is not a valid Python identifier."

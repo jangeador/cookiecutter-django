@@ -55,6 +55,13 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     uv sync --locked --no-dev
 
+{%- if cookiecutter.theme == 'Tailwind' %}
+# Build CSS with test settings: no production credentials or database connection needed.
+RUN DATABASE_URL="postgres://dummy" \
+  DJANGO_SETTINGS_MODULE="config.settings.test" \
+  .venv/bin/python manage.py tailwind build
+{%- endif %}
+
 # Python 'run' stage
 FROM python:3.14-slim-bookworm AS python-run-stage
 

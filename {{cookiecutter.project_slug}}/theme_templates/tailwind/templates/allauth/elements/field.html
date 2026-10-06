@@ -1,0 +1,29 @@
+{% raw %}{% load allauth %}
+<div class="form-field mb-4">
+  <label class="mb-1 block text-sm font-medium text-slate-900"
+         for="{{ attrs.id }}">{% slot label %}{% endslot %}</label>
+{% if attrs.type == "textarea" %}
+  <textarea {% if attrs.id %}id="{{ attrs.id }}"{% endif %}
+            {% if attrs.name %}name="{{ attrs.name }}"{% endif %}
+            {% if attrs.rows %}rows="{{ attrs.rows }}"{% endif %}
+            {% if attrs.placeholder %}placeholder="{{ attrs.placeholder }}"{% endif %}
+            {% if attrs.required %}required{% endif %}
+            {% if attrs.disabled %}disabled{% endif %}
+            {% if attrs.readonly %}readonly{% endif %}>{% slot value %}{% endslot %}</textarea>
+{% else %}
+<input type="{{ attrs.type }}"
+       value="{{ attrs.value|default_if_none:'' }}"
+       {% if attrs.id %}id="{{ attrs.id }}"{% endif %}
+       {% if attrs.name %}name="{{ attrs.name }}"{% endif %}
+       {% if attrs.placeholder %}placeholder="{{ attrs.placeholder }}"{% endif %}
+       {% if attrs.autocomplete %}autocomplete="{{ attrs.autocomplete }}"{% endif %}
+       {% if attrs.required %}required{% endif %}
+       {% if attrs.disabled %}disabled{% endif %}
+       {% if attrs.readonly %}readonly{% endif %}
+       {% if attrs.checked %}checked{% endif %} />
+{% endif %}
+{% if slots.help_text %}
+  <div class="mt-2 text-sm text-slate-500">{% slot help_text %}{% endslot %}</div>
+{% endif %}
+</div>
+{% endraw %}

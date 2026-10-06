@@ -17,6 +17,21 @@ production-ready Django projects quickly.
 - If you have problems with Cookiecutter Django, please open [issues](https://github.com/cookiecutter/cookiecutter-django/issues/new) don't send
   emails to the maintainers.
 
+## Defaults for this fork
+
+This repository remains a configurable Cookiecutter template. New projects default to
+PostgreSQL 18 (the latest stable major), Django REST Framework, Docker, Celery,
+Sentry, AWS storage, and Cloudflare DNS-01 certificates through Traefik.
+All existing options remain selectable, including HTTP-01 certificates.
+Choose `theme=Bootstrap 5` (default) to retain the current UI, or `theme=Tailwind`
+for a complete Tailwind theme built with `django-tailwind-cli`, without Node.js.
+Tailwind uses `frontend_pipeline=None`; Bootstrap keeps all existing pipeline options.
+
+Before deploying with Cloudflare, fill in `CF_DNS_API_TOKEN` in the generated
+`.envs/.production/.traefik` file. Use a token scoped to your domain's zone with
+Zone:Read and DNS:Edit permissions. This production file is ignored by Git.
+AWS and Sentry credentials must also be configured in `.envs/.production/.django`.
+
 ## Features
 
 - For Django 6.0
@@ -88,7 +103,7 @@ First, get Cookiecutter. Trust me, it's awesome:
 
 Now run it against this repo:
 
-    uvx cookiecutter https://github.com/cookiecutter/cookiecutter-django
+    uvx cookiecutter https://github.com/jangeador/cookiecutter-django
 
 You'll be prompted for some values. Provide them, then a Django project will be created for you.
 
@@ -127,7 +142,11 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     2 - PyCharm
     3 - VS Code
     Choose from 1, 2, 3 [1]: 1
-    use_docker [n]: n
+    use_docker [y]: y
+    Select traefik_acme_challenge:
+    1 - Cloudflare
+    2 - HTTP
+    Choose from 1, 2 [1]: 1
     Select postgresql_version:
     1 - 18
     2 - 17
@@ -151,25 +170,29 @@ Answer the prompts with your own desired [options](http://cookiecutter-django.re
     8 - SparkPost
     9 - Other SMTP
     Choose from 1, 2, 3, 4, 5, 6, 7, 8, 9 [1]: 1
-    Select rest_api [None]:
-    1 - None
-    2 - DRF
+    Select rest_api [DRF]:
+    1 - DRF
+    2 - None
     3 - Django Ninja
     Choose from 1, 2, 3 [1]: 1
     use_async [n]: n
+    Select theme:
+    1 - Bootstrap 5
+    2 - Tailwind
+    Choose from 1, 2 [1]: 1
     Select frontend_pipeline:
     1 - None
     2 - Django Compressor
     3 - Gulp
     4 - Webpack
     Choose from 1, 2, 3, 4 [1]: 1
-    use_celery [n]: y
+    use_celery [y]: y
     Select mail_catcher:
     1 - None
     2 - Mailpit
     3 - Mailtrap Local
     Choose from 1, 2, 3 [1]: 1
-    use_sentry [n]: y
+    use_sentry [y]: y
     use_whitenoise [n]: n
     use_heroku [n]: y
     Select ci_tool:

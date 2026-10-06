@@ -14,6 +14,26 @@ License: {{cookiecutter.open_source_license}}
 
 Moved to [settings](https://cookiecutter-django.readthedocs.io/en/latest/1-getting-started/settings.html).
 
+{%- if cookiecutter.use_docker == "y" and cookiecutter.traefik_acme_challenge == "Cloudflare" %}
+
+## Production HTTPS with Cloudflare
+
+Manage your domain's DNS in Cloudflare and configure records for the domain{% if cookiecutter.domain_name.count('.') == 1 %} and `www.{{ cookiecutter.domain_name }}`{% endif %}.
+Set `CF_DNS_API_TOKEN` in `.envs/.production/.traefik` to a token scoped to this
+zone with Zone:Read and DNS:Edit permissions. Keep this file out of version control.
+Traefik reads the token directly and uses DNS-01 to issue and renew Let's Encrypt
+certificates. Keep the `production_traefik` volume to retain the certificates.
+If using Cloudflare's proxy, set SSL/TLS mode to Full (strict).
+Configure your other production credentials in `.envs/.production/.django`.
+
+Start production with:
+
+```bash
+docker compose -f docker-compose.production.yml up -d --build
+```
+
+{%- endif %}
+
 ## Basic Commands
 
 ### Setting Up Your Users
@@ -44,9 +64,55 @@ To run the tests, check your test coverage, and generate an HTML coverage report
 
     uv run pytest
 
+{%- if cookiecutter.theme == "Tailwind" %}
+
+### Tailwind theme
+
+This project uses `django-tailwind-cli` and Tailwind CSS. Node.js is not required.
+Edit templates or `frontend/tailwind.css` to customize the UI. The generated CSS
+and downloaded binary cache are ignored by Git.
+
+{%- if cookiecutter.use_docker == "y" %}
+
+The local stack starts a `tailwind` watcher alongside Django:
+
+```bash
+docker compose -f docker-compose.local.yml up --build
+```
+
+Production Docker images build minified CSS automatically before `collectstatic`.
+The build downloads the pinned Tailwind binary and needs internet access.
+{%- else %}
+
+Start Django and the CSS watcher together:
+
+```bash
+uv run python manage.py tailwind runserver
+```
+
+For a separate Django or Uvicorn server, run the watcher in another terminal:
+
+```bash
+uv run python manage.py tailwind watch
+```
+
+Before deploying, build the CSS before collecting static files:
+
+```bash
+uv run python manage.py tailwind build
+uv run python manage.py collectstatic --noinput
+```
+{%- endif %}
+
+The first build downloads a standalone binary. `TAILWIND_CLI_VERSION` pins its
+version. Keep the CSS source outside static files so AWS and manifest storage
+can process the compiled output correctly.
+{%- else %}
+
 ### Live reloading and Sass CSS compilation
 
 Moved to [Live reloading and SASS compilation](https://cookiecutter-django.readthedocs.io/en/latest/2-local-development/developing-locally.html#using-webpack-or-gulp).
+{%- endif %}
 
 {%- if cookiecutter.use_celery == "y" %}
 

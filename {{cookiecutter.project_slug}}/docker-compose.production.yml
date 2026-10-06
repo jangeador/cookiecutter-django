@@ -61,6 +61,10 @@ services:
       context: .
       dockerfile: ./compose/production/traefik/Dockerfile
     image: {{ cookiecutter.project_slug }}_production_traefik
+    {%- if cookiecutter.traefik_acme_challenge == 'Cloudflare' %}
+    env_file:
+      - ./.envs/.production/.traefik
+    {%- endif %}
     depends_on:
       - django
     volumes:

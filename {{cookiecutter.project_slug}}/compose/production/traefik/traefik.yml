@@ -26,9 +26,18 @@ certificatesResolvers:
     acme:
       email: '{{ cookiecutter.email }}'
       storage: /etc/traefik/acme/acme.json
+      {%- if cookiecutter.traefik_acme_challenge == 'Cloudflare' %}
+      # https://doc.traefik.io/traefik/https/acme/#dnschallenge
+      dnsChallenge:
+        provider: cloudflare
+        resolvers:
+          - '1.1.1.1:53'
+          - '1.0.0.1:53'
+      {%- else %}
       # https://doc.traefik.io/traefik/https/acme/#httpchallenge
       httpChallenge:
         entryPoint: web
+      {%- endif %}
 
 http:
   routers:

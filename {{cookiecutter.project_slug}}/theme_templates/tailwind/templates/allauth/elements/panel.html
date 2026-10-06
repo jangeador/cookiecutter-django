@@ -1,0 +1,7 @@
+{% raw %}{% load allauth %}
+<section class="mb-6 rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+  <h2>{% slot title %}{% endslot %}</h2>
+<div class="space-y-4">{% slot body %}{% endslot %}</div>
+{% if slots.actions %}<ul class="mt-4 flex flex-wrap gap-3">{% for action in slots.actions %}<li>{{ action }}</li>{% endfor %}</ul>{% endif %}
+</section>
+{% endraw %}

@@ -1,0 +1,11 @@
+{% raw %}{% extends "base.html" %}
+{% block title %}Forbidden (403){% endblock title %}
+{% block content %}
+  <section class="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+    <h1>Forbidden (403)</h1>
+    <p>{% if exception %}{{ exception }}{% else %}Your request could not be verified. Refresh the page and try again.{% endif %}</p>
+    <a href="{% url 'home' %}"
+       class="font-semibold text-indigo-600 hover:text-indigo-800">Return home</a>
+  </section>
+{% endblock content %}
+{% endraw %}

@@ -325,6 +325,12 @@ tags
 # Redis dump file
 dump.rdb
 
+{%- if cookiecutter.theme == 'Tailwind' %}
+# Tailwind CLI binary cache and generated stylesheet
+.django_tailwind_cli/
+{{ cookiecutter.project_slug }}/static/css/tailwind.css
+{%- endif %}
+
 ### Project template
 {%- if cookiecutter.mail_catcher == 'Mailpit' and cookiecutter.use_docker == 'n' %}
 mailpit
